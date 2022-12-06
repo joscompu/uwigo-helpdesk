@@ -1,5 +1,6 @@
 from django.utils.translation import gettext_lazy as _
 from django.db import models
+from django import forms
 
 class Ticket(models.Model):
 
@@ -10,12 +11,14 @@ class Ticket(models.Model):
         RESOLVE = 'RS', _('Resuelto')
         CLOSE = 'CL', _('Cerrado')
    
+    title = models.CharField('Titulo',max_length=100)
 
-    title = models.CharField(max_length=100)
-    description = models.CharField(max_length=500)
-    state = models.CharField(
+    description = models.CharField('Descripción', max_length=500)
+    state = models.CharField(verbose_name='Estado',
         max_length=2,
         choices=States.choices,
         default=States.OPEN,
     )
     create_date = models.DateTimeField('Fecha de creación', auto_now=True)
+
+    
