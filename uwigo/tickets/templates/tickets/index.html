@@ -9,12 +9,25 @@
   <body>
     <header class="container">
         <div class="d-flex justify-content-between align-items-center">
-            <h1 class="fs-2">Prueba técnica</h1>
+            <div>
+                <h1 class="fs-2">Prueba técnica</h1>
+                {% if user.is_authenticated %}
+                <p class="text-muted">User: {{ user.get_username }}</p>
+                {% endif %}
+            </div>
             <nav>
-                <a class="btn btn-primary" href={% url 'tickets:create_ticket' %}>Create</a>
+                {% if perms.tickets.can_create %}
+                <a class="btn btn-primary" href={% url 'tickets:create_ticket' %}>Crear</a>
+                {% endif %}
+                {% if user.is_authenticated %}
+               <a  class="btn btn-primary" href="{% url 'logout' %}?next={{ request.path }}">Cerrar Sesion</a>
+                {% else %}
+              <a  class="btn btn-primary" href="{% url 'login' %}?next={{ request.path }}">Login</a>
+                {% endif %}
             </nav>
         </div>
     </header>
+    {% if user.is_authenticated %}
     <main class="container mt-4">
         {% if list_of_tickets %}
         <ul class="row">
@@ -33,6 +46,13 @@
         <p class="text-center fs-2 text-secondary">No hay tickets disponibles.</p>
         {% endif %}
     </main>
+    {% else %}
+    <div class="container mt-4 text-center">
+        <p>
+            Necesitas estar logeado para ver los tickets
+        </p>
+    </div>
+    {% endif %}
      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
   </body>
 </html>

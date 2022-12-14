@@ -4,6 +4,10 @@ from django import forms
 
 class Ticket(models.Model):
 
+    class Meta:
+        permissions = (("can_create", "Crear un ticket"),)
+
+
     class States(models.TextChoices):
         OPEN = 'OP', _('Abierto')
         PENDING = 'PD', _('Pendiente')
