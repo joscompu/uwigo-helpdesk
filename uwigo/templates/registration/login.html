@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="es">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Creat ticket</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+</head>
+
+<body>
+  <header class="container">
+    <div class="d-flex justify-content-between align-items-center">
+      <h1 class="fs-2">Prueba técnica</h1>
+      <nav>
+        <a class="btn btn-primary" href={% url 'tickets:all' %}>Volver</a>
+      </nav>
+    </div>
+  </header>
+  
+  <form method="post" action="{% url 'login' %}" class="container d-flex flex-column justify-content-center mt-4" 
+  style="gap: 0.5rem; max-width: 720px;">
+  {% block content %}
+  
+   
+  
+    {% if next %}
+      {% if user.is_authenticated %}
+        <p>Su cuenta no tiene acceso a esta pagina, por favor ingrese con una cuenta que si la tenga.</p>
+      {% else %}
+        <p>Por favor ingrese sus credenciales.</p>
+      {% endif %}
+    {% endif %}
+    {% csrf_token %}
+    <table>
+      <tr>
+        <td>{{ form.username.label_tag }}</td>
+        <td>{{ form.username }}</td>
+      </tr>
+      <tr>
+        <td>{{ form.password.label_tag }}</td>
+        <td>{{ form.password }}</td>
+      </tr>
+    </table>
+    {% if form.errors %}
+    <p class="text-danger">Clave o usuario incorrectos</p>
+    {% endif %}
+    <div class="mt-4">
+
+      <input type="submit" class="btn btn-success" value="Ingresar">
+      <input type="hidden" name="next" value="{{ next }}">
+      {# Assumes you setup the password_reset view in your URLconf #}
+      <p><a class="link-primary" href="{% url 'password_reset' %}">Olvido su contraseña?</a></p>
+    </div>
+  </form>
+
+
+{% endblock %}
+</body>
